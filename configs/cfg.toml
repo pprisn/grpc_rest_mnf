@@ -1,0 +1,10 @@
+bind_http = ":8080"
+bind_grpc = ":2338"
+bind_prometheus_http = ":8081"
+jaeger_sampler = 0.05
+jaeger_host = "127.0.0.1"
+jaeger_port = ":5775"
+log_level = "debug"
+database_url = "user=ppri dbname=mnf sslmode=disable"
+database_url1 = "postgres://ppri:123@localhost/mnf?sslmode=disable"
+database_url2 = "host='localhost' dbname='restapi_dev' sslmode='require'"

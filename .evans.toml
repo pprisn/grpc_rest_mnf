@@ -1,0 +1,3 @@
+[default]
+protoFile = ["api/mnf/v1/mnf_.proto"]
+port = "2338"
