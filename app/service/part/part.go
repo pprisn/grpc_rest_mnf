@@ -3,10 +3,15 @@ package part
 import (
 	"context"
 	"database/sql"
+	//	"github.com/golang/protobuf/ptypes"
 	_ "github.com/lib/pq"
 	prt "github.com/pprisn/grpc_rest_mnf/api/mnf/v1"
 	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/peer"
+	//	"time"
 )
 
 type Service struct {
@@ -16,8 +21,20 @@ type Service struct {
 
 // CreatePart creates
 func (s Service) CreatePart(ctx context.Context, req *prt.CreatePartRequest) (*prt.CreatePartResponse, error) {
+	p, _ := peer.FromContext(ctx)
 	req.Item.Id = uuid.NewV4().String()
-	return &prt.CreatePartResponse{Id: req.Item.Id}, nil
+	u := &prt.Part{}
+	if err := s.DB.QueryRow(
+		"INSERT INTO part (id, mnf_id, vendor_code, created_at) VALUES ($1, $2, $3, NOW()) RETURNING id",
+		req.Item.Id,
+		req.Item.MnfId,
+		req.Item.VendorCode,
+	).Scan(&u.Id); err != nil {
+		s.LOG.Fatalf("Peer:%s ERROR INSERT part (mnf_id, vendor_code) values (%s, %s) err: %s", p.Addr.String(), req.Item.MnfId, req.Item.VendorCode, err)
+		return nil, grpc.Errorf(codes.Internal, "Could not insert item into part_manufacturer : %s", err)
+	}
+	s.LOG.Infof("Peer:%s INSERT INTO part (mnf_id,vendor_code) values (%s , %s)\n", p.Addr.String(), req.Item.MnfId, req.Item.VendorCode)
+	return &prt.CreatePartResponse{Id: u.Id}, nil
 }
 
 // CreateParts create todo items from a list of todo descriptions

@@ -37,6 +37,7 @@ func (s Service) CreateMnf(ctx context.Context, req *api.CreateMnfRequest) (*api
 		s.LOG.Fatalf("Peer:%s ERROR INSERT part_manufacturer (name) values (%s) err: %s", p.Addr.String(), req.Item.Name, err)
 		return nil, grpc.Errorf(codes.Internal, "Could not insert item into part_manufacturer : %s", err)
 	}
+	s.LOG.Infof("Peer:%s INSERT (id,name) values (%s , %s)\n", p.Addr.String(), req.Item.Id, req.Item.Name)
 	return &api.CreateMnfResponse{Id: u.Id}, nil
 }
 
