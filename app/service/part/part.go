@@ -40,9 +40,21 @@ func (s Service) CreatePart(ctx context.Context, req *prt.CreatePartRequest) (*p
 // CreateParts create todo items from a list of todo descriptions
 func (s Service) CreateParts(ctx context.Context, req *prt.CreatePartsRequest) (*prt.CreatePartsResponse, error) {
 	var ids []string
+	p, _ := peer.FromContext(ctx)
 	for _, item := range req.Items {
 		item.Id = uuid.NewV4().String()
+		u := &prt.Part{}
+		if err := s.DB.QueryRow(
+			"INSERT INTO part (id, mnf_id, vendor_code, created_at) VALUES ($1, $2, $3, NOW()) RETURNING id",
+			item.Id,
+			item.MnfId,
+			item.VendorCode,
+		).Scan(&u.Id); err != nil {
+			s.LOG.Fatalf("Peer:%s ERROR INSERT part (mnf_id, vendor_code) values (%s, %s) err: %s", p.Addr.String(), item.MnfId, item.VendorCode, err)
+			continue
+		}
 		ids = append(ids, item.Id)
+		s.LOG.Infof("Peer:%s INSERT part (id,mnf_id, vendor_code) values (%s, %s, %s)", p.Addr.String(), item.Id, item.MnfId, item.VendorCode)
 	}
 	return &prt.CreatePartsResponse{Ids: ids}, nil
 }
