@@ -6,10 +6,12 @@ import (
 	_ "github.com/lib/pq"
 	prt "github.com/pprisn/grpc_rest_mnf/api/mnf/v1"
 	uuid "github.com/satori/go.uuid"
+	"github.com/sirupsen/logrus"
 )
 
 type Service struct {
-	DB *sql.DB
+	DB  *sql.DB
+	LOG *logrus.Logger
 }
 
 // CreatePart creates

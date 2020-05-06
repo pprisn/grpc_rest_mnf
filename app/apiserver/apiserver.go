@@ -122,10 +122,10 @@ func (s *APIServer) Start() error {
 	)
 
 	// Register Part service, prometheus and HTTP service handler
-	api.RegisterPartServiceServer(server, &prt.Service{DB: db})
+	api.RegisterPartServiceServer(server, &prt.Service{DB: db, LOG: s.logger})
 
 	// Register Mnf service, prometheus and HTTP service handler
-	api.RegisterMnfServiceServer(server, &mnf.Service{DB: db})
+	api.RegisterMnfServiceServer(server, &mnf.Service{DB: db, LOG: s.logger})
 
 	//	grpc_prometheus.Register(server)
 
