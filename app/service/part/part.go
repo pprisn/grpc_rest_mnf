@@ -3,7 +3,7 @@ package part
 import (
 	"context"
 	"database/sql"
-	//	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes"
 	_ "github.com/lib/pq"
 	prt "github.com/pprisn/grpc_rest_mnf/api/mnf/v1"
 	uuid "github.com/satori/go.uuid"
@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/peer"
-	//	"time"
+	"time"
 )
 
 type Service struct {
@@ -61,8 +61,26 @@ func (s Service) CreateParts(ctx context.Context, req *prt.CreatePartsRequest) (
 
 // GetPart retrieves a part item from its ID
 func (s Service) GetPart(ctx context.Context, req *prt.GetPartRequest) (*prt.GetPartResponse, error) {
-	var item prt.Part
-	return &prt.GetPartResponse{Item: &item}, nil
+	p, _ := peer.FromContext(ctx)
+	u := &prt.Part{}
+	var tc time.Time
+	tc = time.Now()
+	//	td = time.Now()
+	if err := s.DB.QueryRow(
+		"SELECT id,mnf_id,vendor_code, created_at FROM part WHERE id=$1 and deleted_at IS NULL;", req.Id,
+	).Scan(
+		&u.Id,
+		&u.MnfId,
+		&u.VendorCode,
+		&tc,
+	); err != nil {
+		s.LOG.Infof("Peer:%s ERROR Could not retrieve  id = %s  from  part : %s", p.Addr.String(), req.Id, err)
+		return nil, grpc.Errorf(codes.NotFound, "Could not retrieve item from the database: %s", err)
+	}
+	u.CreatedAt, _ = ptypes.TimestampProto(tc)
+	//	u.DeletedAt, _ = ptypes.TimestampProto(td)
+	s.LOG.Infof("Peer:%s SELECT id, mnf_id, vendor_code, created_at FROM part_manufacturer => %v\n", p.Addr.String(), u)
+	return &prt.GetPartResponse{Item: u}, nil
 }
 
 // ListPart retrieves a part item from its ID
