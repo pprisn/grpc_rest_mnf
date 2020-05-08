@@ -1,20 +1,22 @@
-# grpc_rest_mnf
+grpc_rest_mnf
+=============
 
-# Микросервис для хранения и обработки запасных частей
-Технологический стек реализации микросервиса 
-- go 1.13+
-- grpc-rest-gateway
-- protobuf 3
-- postgres 9.6+
+Микросервис для хранения и обработки запасных частей
+----------------------------------------------------
 
+### Технологический стек реализации микросервиса 
+> go 1.13+
+> grpc-rest-gateway
+> protobuf 3
+> postgres 9.6+
 
-#Структура таблицы part
-(id, mnf_id, vendor_code, created_at, deleted_at)
+### Структура таблицы part
+id, mnf_id, vendor_code, created_at, deleted_at
 
-#Структура таблицы part_manufacturer
-(id, name, created_at)
+### Структура таблицы part_manufacturer
+id, name, created_at
 
-#Реализованные методы сервиса PartService
+### Реализованные методы сервиса PartService
 mnf.v1.PartService@127.0.0.1:2338> show rpc
 +-------------+--------------------------------+---------------------------+----------------------------+
 |    NAME     |      FULLY-QUALIFIED NAME      |       REQUEST TYPE        |       RESPONSE TYPE        |
@@ -35,7 +37,7 @@ mnf.v1.PartService@127.0.0.1:2338> show rpc
 | UpdateParts | mnf.v1.PartService.UpdateParts | mnf.v1.UpdatePartsRequest | mnf.v1.UpdatePartsResponse |
 +-------------+--------------------------------+---------------------------+----------------------------+
 
-#Реализованные методы сервиса MnfService
+###Реализованные методы сервиса MnfService
 mnf.v1.MnfService@127.0.0.1:2338> show rpc
 +------------+------------------------------+--------------------------+---------------------------+
 |    NAME    |     FULLY-QUALIFIED NAME     |       REQUEST TYPE       |       RESPONSE TYPE       |
@@ -56,10 +58,10 @@ mnf.v1.MnfService@127.0.0.1:2338> show rpc
 | UpdateMnfs | mnf.v1.MnfService.UpdateMnfs | mnf.v1.UpdateMnfsRequest | mnf.v1.UpdateMnfsResponse |
 +------------+------------------------------+--------------------------+---------------------------+
 
-#GRPC REST Gatevay
+###GRPC REST Gateway
 см. описание в файле api.swagger.json
 
-#Тестовые проверочные запрсы к микросервису gRPC выполнены с применением клиента evans
+###Тестовые проверочные запрсы к микросервису gRPC выполнены с применением клиента evans
 https://evans.syfm.me/about
 
 call_CreatePart.sh
@@ -95,8 +97,8 @@ RequestUpdateMnf.json
 call_UpdateMnfs.sh
 RequestUpdateMnfs.json
 
-
-#В проекте использованы знания сообщества
+ 
+###В проекте использованы знания сообщества
 Как перейти на gRPC, сохранив REST
 https://habr.com/ru/post/337716/
 
@@ -112,6 +114,7 @@ https://github.com/gopherschool/http-rest-api/
 Инструментарий мониторинга gRPC сервиса
 Prometheus Go client library
 https://github.com/prometheus/client_golang
+
 Библиотека инструментов, которая реализует OpenTracing Go Tracer для Jaeger (https://jaegertracing.io)
 https://github.com/uber/jaeger-client-go
 
