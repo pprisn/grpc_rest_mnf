@@ -113,7 +113,7 @@ func (s Service) DeletePart(ctx context.Context, req *prt.DeletePartRequest) (*p
 	p, _ := peer.FromContext(ctx)
 	sqlStmt := `                                                                                            		
 DELETE FROM part                                                                               		
-WHERE id = $1;`
+WHERE id = $1 and deleted_at IS NULL;`
 	_, err := s.DB.Exec(sqlStmt, req.Id)
 	if err != nil {
 		s.LOG.Infof("Peer:%s ERROR DELETE FROM part WHERE id => %s\n", p.Addr.String(), req.Id)
@@ -125,6 +125,23 @@ WHERE id = $1;`
 
 // UpdatePart updates a part item
 func (s Service) UpdatePart(ctx context.Context, req *prt.UpdatePartRequest) (*prt.UpdatePartResponse, error) {
+	p, _ := peer.FromContext(ctx)
+	sqlStmt := `                                                                                                              		
+UPDATE part                                                                                                      		
+SET vendor_code = $2                                                                                                                 		
+WHERE id = $1 and deleted_at IS NULL;`
+	res, err := s.DB.Exec(sqlStmt, req.Item.Id, req.Item.VendorCode)
+	if err != nil {
+		return nil, grpc.Errorf(codes.Internal, "DB.Exec could not update part: %s", err)
+	}
+	count, err := res.RowsAffected()
+	if err != nil {
+		return nil, grpc.Errorf(codes.Internal, "RowsAffected could not do UPDATE from part: %s", err)
+	}
+	if count == 0 {
+		return nil, grpc.Errorf(codes.NotFound, "Could not update item: not found")
+	}
+	s.LOG.Infof("Peer:%s UPDATE part SET vendor_code = %s WHERE id = %s\n", p.Addr.String(), req.Item.VendorCode, req.Item.Id)
 	return &prt.UpdatePartResponse{}, nil
 }
 
