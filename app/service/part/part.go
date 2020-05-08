@@ -147,5 +147,24 @@ WHERE id = $1 and deleted_at IS NULL;`
 
 // UpdateTodos updates todo items given their respective title and description.
 func (s Service) UpdateParts(ctx context.Context, req *prt.UpdatePartsRequest) (*prt.UpdatePartsResponse, error) {
+	p, _ := peer.FromContext(ctx)
+	sqlStmt := `                                                                                                          		
+UPDATE part                                                                                                  		
+SET vendor_code = $2                                                                                                             		
+WHERE id = $1 and deleted_at IS NULL;`
+	for _, item := range req.Items {
+		res, err := s.DB.Exec(sqlStmt, item.Id, item.VendorCode)
+		if err != nil {
+			return nil, grpc.Errorf(codes.Internal, "DB.Exec could not UPDATE part: %s", err)
+		}
+		count, err := res.RowsAffected()
+		if err != nil {
+			return nil, grpc.Errorf(codes.Internal, "RowsAffected could not do UPDATE part: %s", err)
+		}
+		if count == 0 {
+			return nil, grpc.Errorf(codes.NotFound, "Could not update item: not found")
+		}
+		s.LOG.Infof("Peer:%s UPDATE part SET vendor_code = %s WHERE id = %s\n", p.Addr.String(), item.VendorCode, item.Id)
+	}
 	return &prt.UpdatePartsResponse{}, nil
 }
