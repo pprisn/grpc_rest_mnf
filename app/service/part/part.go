@@ -110,6 +110,16 @@ func (s Service) ListPart(ctx context.Context, req *prt.ListPartRequest) (*prt.L
 
 // DeletePart deletes a part given an ID
 func (s Service) DeletePart(ctx context.Context, req *prt.DeletePartRequest) (*prt.DeletePartResponse, error) {
+	p, _ := peer.FromContext(ctx)
+	sqlStmt := `                                                                                            		
+DELETE FROM part                                                                               		
+WHERE id = $1;`
+	_, err := s.DB.Exec(sqlStmt, req.Id)
+	if err != nil {
+		s.LOG.Infof("Peer:%s ERROR DELETE FROM part WHERE id => %s\n", p.Addr.String(), req.Id)
+		return nil, grpc.Errorf(codes.Internal, "Could not delete item from the part: %s", err)
+	}
+	s.LOG.Infof("Peer:%s DELETE FROM part WHERE id => %s\n", p.Addr.String(), req.Id)
 	return &prt.DeletePartResponse{}, nil
 }
 
