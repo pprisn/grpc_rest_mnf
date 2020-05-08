@@ -4,8 +4,6 @@ import (
 	"context"
 	"database/sql"
 	_ "github.com/lib/pq"
-	//	"github.com/pprisn/grpc_rest_mnf/app/store"
-	//	"github.com/pprisn/http_rest_api/internal/app/store/sqlstore"
 	"github.com/sirupsen/logrus"
 	"net"
 	"net/http"
@@ -36,11 +34,12 @@ import (
 type APIServer struct {
 	config *Config
 	logger *logrus.Logger
-	//store  *store.Store
 }
 
+//Service ...
 type Service struct{}
 
+//newDB ...
 func newDB(databaseURL string) (*sql.DB, error) {
 	db, err := sql.Open("postgres", databaseURL)
 	if err != nil {
@@ -127,8 +126,6 @@ func (s *APIServer) Start() error {
 	// Register Mnf service, prometheus and HTTP service handler
 	api.RegisterMnfServiceServer(server, &mnf.Service{DB: db, LOG: s.logger})
 
-	//	grpc_prometheus.Register(server)
-
 	// start Prometheus server
 	go func() {
 		mux := http.NewServeMux()
@@ -143,7 +140,6 @@ func (s *APIServer) Start() error {
 	conn, err := grpc.Dial(s.config.BindGrpc, grpc.WithInsecure())
 	if err != nil {
 		return err
-		//		panic("Couldn't contact grpc server")
 	}
 
 	mux := grpc_runtime.NewServeMux()
