@@ -17,7 +17,7 @@ id, mnf_id, vendor_code, created_at, deleted_at
 id, name, created_at
 
 ### Реализованные методы сервиса PartService
-mnf.v1.PartService@127.0.0.1:2338> show rpc
+mnf.v1.PartService@127.0.0.1:2338 show rpc
 CreatePart
 CreateParts
 DeletePart
@@ -26,8 +26,8 @@ ListPart
 UpdatePart
 UpdateParts
 
-###Реализованные методы сервиса MnfService
-mnf.v1.MnfService@127.0.0.1:2338> show rpc
+### Реализованные методы сервиса MnfService
+mnf.v1.MnfService@127.0.0.1:2338 show rpc
 CreateMnf
 CreateMnfs
 DeleteMnf
@@ -36,10 +36,10 @@ ListMnf
 UpdateMnf
 UpdateMnfs
 
-###GRPC REST Gateway
+### GRPC REST Gateway
 см. описание в файле api.swagger.json
 
-###Тестовые проверочные запрсы к микросервису gRPC выполнены с применением клиента evans
+### Тестовые проверочные запрсы к микросервису gRPC выполнены с применением клиента evans
 https://evans.syfm.me/about
 
 call_CreatePart.sh
@@ -76,8 +76,8 @@ call_UpdateMnfs.sh
 RequestUpdateMnfs.json
 
  
-###В проекте использованы знания сообщества
-Как перейти на gRPC, сохранив REST
+### В проекте использованы знания сообщества
+Как  перейти на gRPC, сохранив REST
 https://habr.com/ru/post/337716/
 
 Отличный проект для изучения материала
