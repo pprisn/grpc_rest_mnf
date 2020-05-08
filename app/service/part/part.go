@@ -74,8 +74,8 @@ func (s Service) GetPart(ctx context.Context, req *prt.GetPartRequest) (*prt.Get
 		&u.VendorCode,
 		&tc,
 	); err != nil {
-		s.LOG.Infof("Peer:%s ERROR Could not retrieve  id = %s  from  part : %s", p.Addr.String(), req.Id, err)
-		return nil, grpc.Errorf(codes.NotFound, "Could not retrieve item from the database: %s", err)
+		s.LOG.Infof("Peer:%s ERROR SELECT id = %s  from  part : %s", p.Addr.String(), req.Id, err)
+		return nil, grpc.Errorf(codes.NotFound, "Could not retrieve item from part: %s", err)
 	}
 	u.CreatedAt, _ = ptypes.TimestampProto(tc)
 	//	u.DeletedAt, _ = ptypes.TimestampProto(td)
@@ -86,6 +86,25 @@ func (s Service) GetPart(ctx context.Context, req *prt.GetPartRequest) (*prt.Get
 // ListPart retrieves a part item from its ID
 func (s Service) ListPart(ctx context.Context, req *prt.ListPartRequest) (*prt.ListPartResponse, error) {
 	var items []*prt.Part
+	p, _ := peer.FromContext(ctx)
+	rows, err := s.DB.Query("select id, mnf_id, vendor_code, created_at FROM part WHERE mnf_id=$1 and deleted_at IS NULL", req.Mnfid)
+	if err != nil {
+		s.LOG.Infof("Peer:%s ERROR Query SELECT from  part : %s", p.Addr.String(), err)
+		return nil, grpc.Errorf(codes.NotFound, "Could not make select from part: %s", err)
+	}
+	var tt time.Time
+	tt = time.Now()
+	for rows.Next() {
+		u := &prt.Part{}
+		err := rows.Scan(&u.Id, &u.MnfId, &u.VendorCode, &tt)
+		if err != nil {
+			// log
+			continue
+		}
+		u.CreatedAt, _ = ptypes.TimestampProto(tt)
+		items = append(items, u)
+		s.LOG.Infof("Peer:%s SELECT id, mnf_id, vendor_code, created_at  FROM part => %v\n", p.Addr.String(), u)
+	}
 	return &prt.ListPartResponse{Items: items}, nil
 }
 

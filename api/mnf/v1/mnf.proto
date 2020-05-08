@@ -32,7 +32,7 @@ service PartService {
 
   rpc ListPart(ListPartRequest) returns (ListPartResponse) {
     option (google.api.http)={
-        get: "/v1/part"
+        get: "/v1/part/{mnfid}"
     };
  }
 
@@ -140,7 +140,7 @@ message GetPartResponse {
 
 }
 message ListPartRequest {
-    int32 limit =1;
+    string mnfid =1;
 
 }
 message ListPartResponse {

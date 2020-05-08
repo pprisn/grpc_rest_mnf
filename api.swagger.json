@@ -225,35 +225,6 @@
       }
     },
     "/v1/part": {
-      "get": {
-        "operationId": "PartService_ListPart",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/v1ListPartResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/runtimeError"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int32"
-          }
-        ],
-        "tags": [
-          "PartService"
-        ]
-      },
       "post": {
         "operationId": "PartService_CreatePart",
         "responses": {
@@ -425,6 +396,36 @@
         "parameters": [
           {
             "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "PartService"
+        ]
+      }
+    },
+    "/v1/part/{mnfid}": {
+      "get": {
+        "operationId": "PartService_ListPart",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListPartResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "mnfid",
             "in": "path",
             "required": true,
             "type": "string"
