@@ -1,1 +1,1 @@
-sudo rm -R ./postgres-data
+sudo rm  -R  ./postgres-data

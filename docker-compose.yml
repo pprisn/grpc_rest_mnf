@@ -15,5 +15,6 @@ services:
       - 5436:5432
     network_mode: bridge
 
+
 volumes:
   postgres-data:
