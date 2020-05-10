@@ -5,7 +5,7 @@ jaeger_sampler = 0.05
 jaeger_host = "127.0.0.1"
 jaeger_port = ":5775"
 log_level = "debug"
-database_url = "user=ppri password=123 dbname=mnf sslmode=disable port=5436"
+database_url = "user=ppri password=123 dbname=mnf sslmode=disable host=db port=5432"
 database_url_local = "user=ppri dbname=mnf sslmode=disable port=5432"
 database_url1 = "postgres://ppri:123@localhost/mnf?sslmode=disable"
 database_url2 = "host='localhost' dbname='restapi_dev' sslmode='require'"

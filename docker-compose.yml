@@ -1,7 +1,7 @@
 version: '3'
 services:
 
-  common_db:
+  db:
     image: postgres:11.7
     restart: always
     environment:
@@ -12,9 +12,32 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./postgres-data:/var/lib/postgresql/data
     ports:
-      - 5436:5432
-    network_mode: bridge
+      - "5436:5432"
+    networks:
+      - fullstack
 
+  app:
+    container_name: grpc_mnf
+    build: ./
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+      - "2338:2338"
+      - "8081:8081"
+      - "5775:5775"
+    volumes: 
+      - log:/usr/home/ppri/logs
+    links:
+      - db
+    restart: on-failure
+    networks:
+      - fullstack
 
 volumes:
   postgres-data:
+  log:
+
+networks:
+     fullstack:
+       driver: bridge
