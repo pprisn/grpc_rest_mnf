@@ -8,16 +8,18 @@ grpc_rest_mnf
  go 1.13+
  grpc-rest-gateway
  protobuf 3
- postgres 9.6+
+ postgres 11.7+
+ docker
 
 ### Структура таблицы part
-id, mnf_id, vendor_code, created_at, deleted_at
+id, mnf
+_id, vendor_code, created_at, deleted_at
 
 ### Структура таблицы part_manufacturer
-id, name, created_at
+ id, name, created_at
 
 ### Реализованные методы сервиса PartService
-mnf.v1.PartService@127.0.0.1:2338 show rpc
+m nf.v1.PartService@127.0.0.1:2338 show rpc
 CreatePart
 CreateParts
 DeletePart
@@ -27,7 +29,7 @@ UpdatePart
 UpdateParts
 
 ### Реализованные методы сервиса MnfService
-mnf.v1.MnfService@127.0.0.1:2338 show rpc
+mn f.v1.MnfService@127.0.0.1:2338 show rpc
 CreateMnf
 CreateMnfs
 DeleteMnf
@@ -38,6 +40,7 @@ UpdateMnfs
 
 ### GRPC REST Gateway
 см. описание в файле api.swagger.json
+
 
 ### Тестовые проверочные запрсы к микросервису gRPC выполнены с применением клиента evans
 https://evans.syfm.me/about
@@ -75,9 +78,9 @@ RequestUpdateMnf.json
 call_UpdateMnfs.sh
 RequestUpdateMnfs.json
 
- 
+  
 ### В проекте использованы знания сообщества
-Как  перейти на gRPC, сохранив REST
+Ка к  перейти на gRPC, сохранив REST
 https://habr.com/ru/post/337716/
 
 Отличный проект для изучения материала
