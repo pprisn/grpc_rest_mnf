@@ -85,8 +85,9 @@ func (s *APIServer) Start() error {
 	s.logger.Info("starting BindGrpc tcp server")
 
 	// Logrus
-	logger := log.NewEntry(log.New())
-	grpc_logrus.ReplaceGrpcLogger(logger)
+	//	logger := log.NewEntry(log.New())
+	entrylogger := log.NewEntry(s.logger)
+	grpc_logrus.ReplaceGrpcLogger(entrylogger)
 	log.SetLevel(log.InfoLevel)
 	// Prometheus monitoring
 	metrics := prometheus_metrics.New()
@@ -107,14 +108,14 @@ func (s *APIServer) Start() error {
 			grpc_ctxtags.StreamServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
 			grpc_opentracing.StreamServerInterceptor(grpc_opentracing.WithTracer(tracer)),
 			grpc_prometheus.StreamServerInterceptor,
-			grpc_logrus.StreamServerInterceptor(logger),
+			grpc_logrus.StreamServerInterceptor(entrylogger),
 			grpc_recovery.StreamServerInterceptor(grpc_recovery.WithRecoveryHandler(panicHandler)),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_ctxtags.UnaryServerInterceptor(grpc_ctxtags.WithFieldExtractor(grpc_ctxtags.CodeGenRequestFieldExtractor)),
 			grpc_opentracing.UnaryServerInterceptor(grpc_opentracing.WithTracer(tracer)),
 			grpc_prometheus.UnaryServerInterceptor,
-			grpc_logrus.UnaryServerInterceptor(logger),
+			grpc_logrus.UnaryServerInterceptor(entrylogger),
 			grpc_recovery.UnaryServerInterceptor(grpc_recovery.WithRecoveryHandler(panicHandler)),
 		)),
 	)
