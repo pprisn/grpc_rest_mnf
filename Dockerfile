@@ -1,5 +1,8 @@
 FROM golang:latest
 ENV APP_NAME grpc_mnf
+ARG LOG_DIR=/app/logs
+RUN mkdir -p ${LOG_DIR}
+ENV LOG_FILE_LOCATION=${LOG_DIR}/grpc_mnf.log
 RUN apt-get update && apt-get install make bash
 WORKDIR /app
 COPY ./ /app

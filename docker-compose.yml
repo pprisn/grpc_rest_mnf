@@ -26,8 +26,8 @@ services:
       - "2338:2338"
       - "8081:8081"
       - "5775:5775"
-    #    volumes: 
-    #      - log:/usr/home/ppri/logs
+    volumes: 
+      - ~/logs/grpc_mnf:/app/logs
     links:
       - db
     restart: on-failure
@@ -36,7 +36,7 @@ services:
 
 volumes:
   postgres-data:
-  #log:
+  logs:
 
 networks:
      fullstack:

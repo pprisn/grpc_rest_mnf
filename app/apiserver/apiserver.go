@@ -7,6 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"net"
 	"net/http"
+	"os"
 	"runtime"
 	//	"github.com/go-pg/pg"
 	"github.com/grpc-ecosystem/go-grpc-middleware"
@@ -28,6 +29,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 //APIServer ...
@@ -84,11 +86,8 @@ func (s *APIServer) Start() error {
 
 	// Logrus
 	logger := log.NewEntry(log.New())
-
 	grpc_logrus.ReplaceGrpcLogger(logger)
-
 	log.SetLevel(log.InfoLevel)
-
 	// Prometheus monitoring
 	metrics := prometheus_metrics.New()
 	tracer, closer, err := config.Configuration{
@@ -167,8 +166,17 @@ func (s *APIServer) configureLogger() error {
 		FullTimestamp: true,
 	}
 	s.logger.SetFormatter(formatter)
+	LOG_FILE_LOCATION := os.Getenv("LOG_FILE_LOCATION")
+	if LOG_FILE_LOCATION != "" {
+		s.logger.SetOutput(&lumberjack.Logger{
+			Filename:   LOG_FILE_LOCATION,
+			MaxSize:    500, // megabytes
+			MaxBackups: 3,
+			MaxAge:     28,   //days
+			Compress:   true, // disabled by default
+		})
+	}
 	return nil
-
 }
 
 // Panic handler prints the stack trace when recovering from a panic.
