@@ -13,7 +13,7 @@ ad0d6cb13f46        postgres:11.7       "docker-entrypoint.s…"   37 minutes ag
 это ID = c80d17f5f638
 
 Запишем команду для запуска контейнера прицепа в файл run_topz.sh
-``
+```
 #!/bin/sh                                                                                                                                                                                                                      
   2 APP_ID='c80d17f5f638'                                                                                                   
   3 docker run --pid=container:${APP_ID} \                                                                                  
@@ -22,14 +22,14 @@ ad0d6cb13f46        postgres:11.7       "docker-entrypoint.s…"   37 minutes ag
 Установим атрибуты разрешения на запуск.
 chmod 755 run_topz.sh
 
-Запуск контейнера-прицепа  
+После запуска контейнера-прицепа командой
 ./run_topz.sh
  
  Получить срез информации о процессах, работающих в  контейнере приложения и используемых ими ресурсах
  можно будет, обратившись по  адресу http://localhost:8083/topz
 
 В моем случае отображается следующая информация
- ```
+```
 20 9.905868592174695 0.03887358  /server -addr 0.0.0.0:8083
 1  0                 0.000591483 /bin/sh -c ./${APP_NAME}
 6  0                 0.12378426  ./grpc_mnf
@@ -43,5 +43,7 @@ chmod 755 run_topz.sh
  > proc.Command
 
 Исходный код  приложения topz посмотреть можно здесь
+```
 https://github.com/brendandburns/topz/blob/master/pkg/topz/topz.go
+```
 
