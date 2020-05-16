@@ -12,14 +12,13 @@ grpc_rest_mnf
  docker
 
 ### Структура таблицы part
-id, mnf
-_id, vendor_code, created_at, deleted_at
+id, mnf_id, vendor_code, created_at, deleted_at
 
 ### Структура таблицы part_manufacturer
  id, name, created_at
 
 ### Реализованные методы сервиса PartService
-m nf.v1.PartService@127.0.0.1:2338 show rpc
+mnf.v1.PartService@127.0.0.1:2338 show rpc
 CreatePart
 CreateParts
 DeletePart
@@ -42,45 +41,67 @@ UpdateMnfs
 см. описание в файле api.swagger.json
 
 
-### Тестовые проверочные запрсы к микросервису gRPC выполнены с применением клиента evans
+### Тестовые проверочные запросы к микросервису gRPC выполнены с применением клиента evans
 https://evans.syfm.me/about
 
+```
 call_CreatePart.sh
+```
 RequestCreatePart.json
 
+```
 call_CreateParts.sh
+```
 RequestCreateParts.json
 
+```
 call_ListPart.sh
+```
 RequestListPart.json
 
+```
 call_GetPart.sh
+```
 RequestGetPart.json
 
+```
 call_CreateMnf.sh
+```
 RequestCreateMnf.json
 
+```
 call_CreateMnfs.sh
+```
 RequestCreateMnfs.json
 
+```
 call_GetMnf.sh
+```
 RequestGetMnf.json
 
+```
 call_ListMnf.sh
+```
 RequestListMnf.json
 
+```
 call_DeleteMnf.sh
+```
 RequestDeleteMnf.json
 
+```
 call_UpdateMnf.sh
+```
 RequestUpdateMnf.json
 
+```
 call_UpdateMnfs.sh
+```
 RequestUpdateMnfs.json
 
-  
+   
 ### В проекте использованы знания сообщества
-Ка к  перейти на gRPC, сохранив REST
+Как  перейти на gRPC, сохранив REST
 https://habr.com/ru/post/337716/
 
 Отличный проект для изучения материала
